@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O Código do Emagrecimento</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0D1B3E;
+    --navy-mid: #1A2F5A;
+    --navy-light: #243B6F;
+    --green: #22C55E;
+    --green-dark: #16A34A;
+    --green-glow: rgba(34,197,94,0.18);
+    --white: #FFFFFF;
+    --off-white: #F0F4FF;
+    --gray: #8FA3C0;
+    --text-body: #CBD5E1;
+    --gold: #F59E0B;
+    --radius: 16px;
+    --radius-sm: 8px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  /* ---- TYPOGRAPHY ---- */
+  h1, h2, h3, h4 { font-family: 'Sora', sans-serif; line-height: 1.2; }
+
+  /* ---- UTILITY ---- */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+  .tag {
+    display: inline-block;
+    background: var(--green-glow);
+    color: var(--green);
+    border: 1px solid rgba(34,197,94,0.35);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    padding: 6px 16px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  /* ---- CTA BUTTON ---- */
+  .cta-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
+    color: #fff;
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: clamp(15px, 2.5vw, 18px);
+    text-decoration: none;
+    padding: 20px 40px;
+    border-radius: 100px;
+    box-shadow: 0 0 32px rgba(34,197,94,0.4), 0 4px 20px rgba(0,0,0,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-align: center;
+    line-height: 1.3;
+    cursor: pointer;
+  }
+  .cta-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 0 48px rgba(34,197,94,0.55), 0 8px 30px rgba(0,0,0,0.35);
+  }
+  .cta-btn.large { font-size: clamp(17px, 3vw, 22px); padding: 24px 52px; }
+
+  /* ---- FADE IN ON SCROLL ---- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(36px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ==================== HERO ==================== */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 24px 60px;
+    overflow: hidden;
+    background: radial-gradient(ellipse 90% 70% at 50% 0%, #1A3A6B 0%, var(--navy) 70%);
+  }
+
+  #hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 50%, rgba(34,197,94,0.08) 0%, transparent 55%),
+      radial-gradient(circle at 80% 20%, rgba(13,60,120,0.4) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  /* Grid lines */
+  #hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-inner { position: relative; z-index: 1; }
+
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--green);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .hero-eyebrow span { width: 32px; height: 1px; background: var(--green); display: block; }
+
+  #hero h1 {
+    font-size: clamp(36px, 7vw, 72px);
+    font-weight: 800;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #fff 30%, #a5c4ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  #hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--green) 0%, #86EFAC 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2.5vw, 20px);
+    color: var(--text-body);
+    max-width: 680px;
+    margin: 0 auto 40px;
+  }
+
+  .hero-trust {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+    color: var(--gray);
+    font-size: 13px;
+  }
+  .hero-trust-item { display: flex; align-items: center; gap: 6px; }
+  .hero-trust-item svg { color: var(--green); }
+
+  /* ==================== URGENCY BANNER ==================== */
+  #urgency-bar {
+    background: linear-gradient(90deg, #14532D 0%, #15803D 50%, #14532D 100%);
+    padding: 12px 24px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  #urgency-bar .timer-wrap { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+  .timer-digits {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .timer-block {
+    background: rgba(0,0,0,0.3);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-family: 'Sora', monospace;
+    font-size: 20px;
+    font-weight: 800;
+    min-width: 44px;
+    text-align: center;
+  }
+  .timer-sep { font-size: 18px; font-weight: 800; }
+
+  /* ==================== BENEFITS ==================== */
+  #benefits {
+    padding: 96px 24px;
+    background: linear-gradient(180deg, var(--navy) 0%, var(--navy-mid) 100%);
+  }
+
+  .section-header { text-align: center; margin-bottom: 56px; }
+  .section-header h2 { font-size: clamp(28px, 5vw, 46px); font-weight: 800; margin-bottom: 16px; }
+  .section-header p { color: var(--text-body); max-width: 560px; margin: 0 auto; font-size: 17px; }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .benefit-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    transition: border-color 0.25s, background 0.25s;
+  }
+  .benefit-card:hover {
+    border-color: rgba(34,197,94,0.4);
+    background: rgba(34,197,94,0.05);
+  }
+
+  .benefit-icon {
+    width: 44px; height: 44px;
+    background: var(--green-glow);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+  .benefit-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .benefit-card p { font-size: 14px; color: var(--text-body); line-height: 1.6; }
+
+  /* ==================== WHAT YOU LEARN ==================== */
+  #learn {
+    padding: 96px 24px;
+    background: var(--navy-mid);
+  }
+
+  .learn-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 48px;
+  }
+
+  .learn-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-left: 3px solid var(--green);
+    border-radius: var(--radius-sm);
+    padding: 20px 24px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .learn-item .num {
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--green);
+    min-width: 28px;
+    padding-top: 2px;
+  }
+
+  /* ==================== TESTIMONIALS ==================== */
+  #testimonials {
+    padding: 96px 24px;
+    background: linear-gradient(180deg, var(--navy-mid) 0%, var(--navy) 100%);
+  }
+
+  .testi-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 12px;
+    margin-bottom: 48px;
+    font-style: italic;
+  }
+
+  .testi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+
+  .testi-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+  }
+
+  .stars { color: var(--gold); font-size: 18px; margin-bottom: 14px; }
+  .testi-text { font-size: 15px; color: var(--text-body); margin-bottom: 18px; line-height: 1.65; font-style: italic; }
+  .testi-author {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy-light), var(--green-dark));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+  }
+  .author-name { font-weight: 600; font-size: 14px; }
+  .author-label { font-size: 12px; color: var(--gray); }
+
+  /* ==================== GUARANTEE ==================== */
+  #guarantee {
+    padding: 80px 24px;
+    background: var(--navy);
+  }
+
+  .guarantee-box {
+    max-width: 680px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 48px 40px;
+    text-align: center;
+  }
+
+  .guarantee-icon { font-size: 64px; margin-bottom: 20px; }
+  .guarantee-box h2 { font-size: clamp(24px, 4vw, 32px); margin-bottom: 16px; }
+  .guarantee-box p { color: var(--text-body); font-size: 16px; max-width: 500px; margin: 0 auto; }
+
+  /* ==================== OFFER ==================== */
+  #offer {
+    padding: 96px 24px;
+    background: linear-gradient(135deg, var(--navy-mid) 0%, #0D2952 100%);
+  }
+
+  .offer-box {
+    max-width: 600px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.04);
+    border: 2px solid rgba(34,197,94,0.3);
+    border-radius: var(--radius);
+    padding: 52px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .offer-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(34,197,94,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .offer-badge {
+    background: var(--green);
+    color: var(--navy);
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    border-radius: 100px;
+    display: inline-block;
+    margin-bottom: 24px;
+  }
+
+  .offer-old-price {
+    font-size: 18px;
+    color: var(--gray);
+    text-decoration: line-through;
+    margin-bottom: 4px;
+  }
+
+  .offer-price {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(52px, 10vw, 80px);
+    font-weight: 800;
+    color: var(--green);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .offer-price sup { font-size: 0.45em; vertical-align: super; }
+  .offer-price sub { font-size: 0.35em; vertical-align: baseline; }
+
+  .offer-subtitle { color: var(--text-body); font-size: 15px; margin-bottom: 36px; }
+
+  .offer-perks {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 36px;
+    text-align: left;
+  }
+  .offer-perk { display: flex; align-items: center; gap: 10px; font-size: 15px; }
+  .offer-perk::before { content: '✅'; font-size: 16px; }
+
+  /* ==================== CTA FINAL ==================== */
+  #cta-final {
+    padding: 96px 24px;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, #1A3A6B 0%, var(--navy) 70%);
+    text-align: center;
+  }
+
+  #cta-final h2 { font-size: clamp(28px, 5vw, 48px); font-weight: 800; margin-bottom: 20px; }
+  #cta-final p { font-size: 18px; color: var(--text-body); max-width: 580px; margin: 0 auto 44px; }
+
+  /* ==================== FOOTER ==================== */
+  footer {
+    background: #060E1F;
+    padding: 36px 24px;
+    text-align: center;
+    color: var(--gray);
+    font-size: 13px;
+    line-height: 2;
+  }
+  footer a { color: var(--gray); }
+  footer .footer-icons { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 12px; font-size: 13px; }
+  footer .footer-icons span { display: flex; align-items: center; gap: 6px; }
+
+  /* ==================== MOBILE ==================== */
+  @media (max-width: 600px) {
+    .offer-box, .guarantee-box { padding: 36px 24px; }
+    .cta-btn.large { padding: 20px 28px; }
+    .learn-item { flex-direction: column; gap: 8px; }
+    .hero-trust { gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- URGENCY BAR -->
+<div id="urgency-bar">
+  <div class="timer-wrap">
+    <span>⚡ Oferta especial encerra em:</span>
+    <div class="timer-digits">
+      <div class="timer-block" id="t-h">00</div>
+      <span class="timer-sep">:</span>
+      <div class="timer-block" id="t-m">29</div>
+      <span class="timer-sep">:</span>
+      <div class="timer-block" id="t-s">59</div>
+    </div>
+    <span>— Esta condição pode ser encerrada a qualquer momento.</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span></span> Método digital de educação em saúde <span></span></div>
+    <h1>Descubra<br><em>O Código do</em><br><em>Emagrecimento</em></h1>
+    <p class="hero-sub">Aprenda um método simples que já ajudou milhares de pessoas a transformar seus hábitos e alcançar seus objetivos de emagrecimento de forma prática.</p>
+    <a href="https://pay.cakto.com.br/39cmxew_914521" class="cta-btn large" target="_blank">
+      QUERO ACESSAR AGORA POR R$ 25,90
+    </a>
+    <div class="hero-trust">
+      <div class="hero-trust-item">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Acesso imediato
+      </div>
+      <div class="hero-trust-item">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Pagamento seguro
+      </div>
+      <div class="hero-trust-item">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+        +5.000 alunos
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section id="benefits">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="tag">Por que escolher</div>
+      <h2>Tudo o que você precisa<br>para mudar seus hábitos</h2>
+      <p>Um conteúdo pensado para quem quer clareza, praticidade e resultados reais na organização da rotina.</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card reveal">
+        <div class="benefit-icon">🎯</div>
+        <h3>Método simples e direto</h3>
+        <p>Conteúdo fácil de aplicar no dia a dia, sem complicações técnicas.</p>
+      </div>
+      <div class="benefit-card reveal">
+        <div class="benefit-icon">📱</div>
+        <h3>Estratégias para o cotidiano</h3>
+        <p>Dicas práticas que cabem na sua rotina, qualquer que seja ela.</p>
+      </div>
+      <div class="benefit-card reveal">
+        <div class="benefit-icon">⚡</div>
+        <h3>Acesso digital imediato</h3>
+        <p>Após a confirmação, o conteúdo fica disponível na hora, de qualquer dispositivo.</p>
+      </div>
+      <div class="benefit-card reveal">
+        <div class="benefit-icon">🌱</div>
+        <h3>Hábitos saudáveis</h3>
+        <p>Técnicas para criar e manter hábitos sustentáveis ao longo do tempo.</p>
+      </div>
+      <div class="benefit-card reveal">
+        <div class="benefit-icon">📋</div>
+        <h3>Passo a passo organizado</h3>
+        <p>Estrutura clara e lógica para você seguir sem se perder.</p>
+      </div>
+      <div class="benefit-card reveal">
+        <div class="benefit-icon">♾️</div>
+        <h3>Acesso vitalício</h3>
+        <p>Sem prazo de validade. Revise o material quando e quantas vezes quiser.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU LEARN -->
+<section id="learn">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="tag">Conteúdo do material</div>
+      <h2>O que você vai aprender</h2>
+      <p>Cada módulo foi desenvolvido para guiar você de forma prática e objetiva.</p>
+    </div>
+    <ul class="learn-list">
+      <li class="learn-item reveal"><span class="num">01</span> Como evitar os erros mais comuns que atrapalham o emagrecimento e que muita gente comete sem perceber.</li>
+      <li class="learn-item reveal"><span class="num">02</span> Estratégias comprovadas para manter a disciplina, mesmo nos dias mais difíceis.</li>
+      <li class="learn-item reveal"><span class="num">03</span> Como organizar uma rotina saudável de forma realista e sustentável.</li>
+      <li class="learn-item reveal"><span class="num">04</span> Técnicas para aumentar a motivação e manter o foco nos seus objetivos.</li>
+      <li class="learn-item reveal"><span class="num">05</span> Como criar hábitos duradouros que se tornam parte natural do seu estilo de vida.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="tag">Depoimentos</div>
+      <h2>O que as pessoas dizem</h2>
+    </div>
+    <p class="testi-note">* Avaliações ilustrativas apresentadas como exemplos de experiências com o conteúdo.</p>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Material muito organizado e fácil de entender. Me ajudou a melhorar minha rotina e a ver a alimentação de outra forma."</p>
+        <div class="testi-author">
+          <div class="avatar">A</div>
+          <div>
+            <div class="author-name">Ana M.</div>
+            <div class="author-label">Aluna do programa</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Gostei muito da linguagem simples e das dicas práticas. Consegui aplicar já na primeira semana."</p>
+        <div class="testi-author">
+          <div class="avatar">C</div>
+          <div>
+            <div class="author-name">Carlos R.</div>
+            <div class="author-label">Aluno do programa</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="testi-text">"Excelente conteúdo para quem quer começar uma mudança de hábitos. Recomendo para todo mundo que está buscando uma vida mais saudável."</p>
+        <div class="testi-author">
+          <div class="avatar">J</div>
+          <div>
+            <div class="author-name">Juliana S.</div>
+            <div class="author-label">Aluna do programa</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GUARANTEE -->
+<section id="guarantee">
+  <div class="container">
+    <div class="guarantee-box reveal">
+      <div class="guarantee-icon">🛡️</div>
+      <h2>Garantia de Satisfação</h2>
+      <p>Você pode avaliar o conteúdo e verificar se ele atende às suas expectativas conforme as políticas aplicáveis da plataforma Cakto.</p>
+    </div>
+  </div>
+</section>
+
+<!-- OFFER -->
+<section id="offer">
+  <div class="container">
+    <div class="offer-box reveal">
+      <div class="offer-badge">⚡ Oferta Especial</div>
+      <h2 style="font-size: clamp(22px,4vw,30px); margin-bottom: 16px;">Acesso completo ao material</h2>
+      <p class="offer-old-price">De: R$ 97,00</p>
+      <div class="offer-price"><sup>R$</sup> 25<sub>,90</sub></div>
+      <p class="offer-subtitle">Pagamento único · Acesso vitalício · Entrega imediata</p>
+      <div class="offer-perks">
+        <div class="offer-perk">Acesso imediato após confirmação</div>
+        <div class="offer-perk">Disponível em celular e computador</div>
+        <div class="offer-perk">Conteúdo em linguagem simples e direta</div>
+        <div class="offer-perk">Sem mensalidade ou cobrança recorrente</div>
+      </div>
+      <a href="https://pay.cakto.com.br/39cmxew_914521" class="cta-btn" target="_blank" style="display:block; width:100%;">
+        QUERO ACESSAR AGORA — R$ 25,90
+      </a>
+      <p style="font-size:13px; color:var(--gray); margin-top:16px;">🔒 Pagamento 100% seguro via Cakto</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="cta-final">
+  <div class="container">
+    <div class="reveal">
+      <div class="tag">Comece hoje</div>
+      <h2>Sua transformação começa agora</h2>
+      <p>Não adie seus objetivos. Tenha acesso imediato ao conteúdo e comece a organizar sua rotina hoje mesmo.</p>
+      <a href="https://pay.cakto.com.br/39cmxew_914521" class="cta-btn large" target="_blank">
+        QUERO ACESSAR O CÓDIGO DO EMAGRECIMENTO
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-icons">
+    <span>🔒 Site seguro</span>
+    <span>💳 Pagamento processado pela <a href="https://www.cakto.com.br" target="_blank">Cakto</a></span>
+    <span>📧 Suporte disponível</span>
+  </div>
+  <p>© 2025 O Código do Emagrecimento. Todos os direitos reservados.</p>
+  <p style="margin-top:8px; font-size:12px; max-width:600px; margin-left:auto; margin-right:auto; color:#4B6080;">
+    Este produto é um material educativo sobre hábitos e organização de rotina. Não oferece diagnóstico, tratamento médico ou garantia de resultados específicos. Consulte um profissional de saúde para orientações individualizadas.
+  </p>
+</footer>
+
+<script>
+// ---- COUNTDOWN TIMER ----
+(function() {
+  const end = new Date().getTime() + (29 * 60 + 59) * 1000;
+  function pad(n) { return String(n).padStart(2,'0'); }
+  function tick() {
+    const now = new Date().getTime();
+    const diff = Math.max(0, end - now);
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('t-h').textContent = pad(h);
+    document.getElementById('t-m').textContent = pad(m);
+    document.getElementById('t-s').textContent = pad(s);
+    if (diff > 0) setTimeout(tick, 1000);
+  }
+  tick();
+})();
+
+// ---- SCROLL REVEAL ----
+(function() {
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  els.forEach(el => io.observe(el));
+})();
+</script>
+</body>
+</html>
